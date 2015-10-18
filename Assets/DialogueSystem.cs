@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Xml;
 
 public class DialogueSystem : MonoBehaviour {
-	public static readonly char[] UNTYPED_SYMBOLS = { '.', ',', ' ', ':', ';' };
-
 	public bool DialogueActive { get { return panel.activeSelf; } }
 
 	public Text dialogueText;
@@ -34,7 +32,7 @@ public class DialogueSystem : MonoBehaviour {
 		{
 			dialogueText.text += letter;
 			yield return new WaitForEndOfFrame();
-			if (Array.BinarySearch(UNTYPED_SYMBOLS,letter) < 0) // if untyped_symbols contains letter... this is overly complicated
+			if (!char.IsWhiteSpace(letter)) // don't type out spaces
 				yield return new WaitForSeconds(line.TextSpeed);
 		}
 		lineFinished = true;

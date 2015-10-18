@@ -8,9 +8,8 @@ public static class XmlDialogueReader {
 	{
 		var lines = new List<DialogueLine>();
 		XDocument xml = XDocument.Load("Assets/Dialogue/" + scene + ".xml");
-		XElement eDialogue = xml.Element("dialogue");
 
-		foreach (var eLine in eDialogue.Element("lines").Elements())
+		foreach (var eLine in xml.Element("dialogue").Element("lines").Elements())
 		{
 			XElement text = eLine.Element("text");
 			lines.Add(new DialogueLine
@@ -21,6 +20,7 @@ public static class XmlDialogueReader {
 					(text.Attribute("name") == null ? DialogueLine.DEFAULT_NAME : (string)text.Attribute("name"))
 				)
 			);
+			Debug.Log(text.Attribute("speed"));
 		}
 
 		return lines.ToArray();
