@@ -1,75 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
 public class DialogueSystem : MonoBehaviour {
+	public static readonly char[] UNTYPED_SYMBOLS = { '.', ',', ' ', ':', ';' };
+
+	public bool DialogueActive { get { return panel.activeSelf; } }
+
 	public Text dialogueText;
 	public Image image;
+	public GameObject panel;
 
-	private List<DialogueLine> lines;
+	private DialogueLine[] lines;
 	private int lineIndex = 0;
-	private bool lineFinished;
-
-	public List<DialogueLine> LoadDialogue(string scene)
+	private bool lineFinished = false;
+	
+	public void TriggerDialogue(string scene)
 	{
-		var lines = new List<DialogueLine>();
-		using (XmlReader reader = XmlReader.Create("Assets/Dialogue/" + scene + ".xml"))
-		{
-			reader.Read(); reader.Read(); // skip <dialogue> 
-
-			while (reader.Read())
-			{
-				// </dialogue>
-				if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "dialogue") break;
-				if (reader.Name == "line")
-				{
-					lines.Add(GetDialogueLine(reader));
-				}
-			}
-			reader.Close();
-		}
-		return lines;
-	}
-
-	private DialogueLine GetDialogueLine(XmlReader reader)
-	{
-		var line = new DialogueLine();
-		print("Getting dialogue line.");
-		string element = ""; // if this isn't overwritten, something probably went really wrong
-		// read until </line> is encountered
-		while (reader.Read())
-		{
-			if (reader.IsStartElement() && reader.NodeType == XmlNodeType.Element && reader.Name != "line") // dont read worthless </> tag scum
-			{
-				element = reader.Name;
-			}
-			else if (reader.NodeType == XmlNodeType.Text)
-			{
-				switch (element)
-				{
-					case "portrait":
-						line.Portrait = Resources.Load<Sprite>(reader.Value.ToString());
-						print(line.Portrait);
-						break;
-					case "text":
-						line.Text = reader.Value;
-						break;
-					case "speed":
-						line.TextSpeed = float.Parse(reader.Value);
-						break;
-					default:
-						print("something probably went really wrong, line: " + reader.Name + " value: " + reader.Value);
-						break;
-				}
-			}
-			else
-			{
-				if (reader.Name == "line") break; // </line>
-			}
-        }
-		return line;
+		if (DialogueActive) return; // dialogue already triggered
+		panel.SetActive(true);
+		lines = XmlDialogueReader.LoadDialogue(scene);
+		DisplayLine(lines[0]);
 	}
 
 	private IEnumerator TypeText()
@@ -79,8 +33,9 @@ public class DialogueSystem : MonoBehaviour {
         foreach (char letter in line.Text.ToCharArray())
 		{
 			dialogueText.text += letter;
-			yield return 0;
-			if (!char.IsWhiteSpace(letter)) yield return new WaitForSeconds(line.TextSpeed);
+			yield return new WaitForEndOfFrame();
+			if (Array.BinarySearch(UNTYPED_SYMBOLS,letter) < 0) // if untyped_symbols contains letter... this is overly complicated
+				yield return new WaitForSeconds(line.TextSpeed);
 		}
 		lineFinished = true;
 	}
@@ -95,24 +50,31 @@ public class DialogueSystem : MonoBehaviour {
 
 	void Start()
 	{
-		lineFinished = false;
-		lines = LoadDialogue("scene1");
-		DisplayLine(lines[0]);
+		panel.SetActive(false);
 	}
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Z))
+        if (DialogueActive)
 		{
-			if (lineFinished)
+			if (Input.GetKeyDown(KeyCode.Z)) // TODO rebindable
 			{
-				DisplayLine(lines[++lineIndex]);
-			}
-			else
-			{
-				dialogueText.text = lines[lineIndex].Text;
-				lineFinished = true;
-				StopCoroutine("TypeText");
+				if (lineIndex >= lines.Length-1 && lineFinished)
+				{
+					panel.SetActive(false);
+					return;
+				}
+
+				if (lineFinished)
+				{
+					DisplayLine(lines[++lineIndex]);
+				}
+				else
+				{
+					dialogueText.text = lines[lineIndex].Text;
+					lineFinished = true;
+					StopCoroutine("TypeText");
+				}
 			}
 		}
 	}
