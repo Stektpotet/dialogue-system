@@ -1,0 +1,24 @@
+﻿<dialogue>
+	<line>
+		<portrait>el car</portrait>
+		<text>Just pretend these cars are honking.</text>
+		<speed>0.11</speed>
+	</line>
+	<line>
+		<portrait>truck</portrait>
+		<text>「すべてがFになる」 It supports Japanese but not sanskrit, nice.</text>
+	</line>
+	<line>
+		<portrait>el car</portrait>
+		<text>Mattis vivamus ultricies interdum aenean, dui erat sed. A sit nam sed neque ullamcorper pede, in fermentum neque urna, a eget massa tellus amet dolor, elit enim eget ipsum orci vivamus,</text>
+	</line>
+	<line>
+		<portrait>el car</portrait>
+		<text>sit vestibulum nulla. Elit id magnis. Amet eu sed, elit sed leo phasellus eros sit et. Metus ullamcorper id turpis ut justo, elit wisi et mi nunc erat, rutrum arcu purus, felis quisque sodales tortor. Lorem ipsum, how original. Char limit hey oy woh haho Go to the pond and eat the fishies, Smeagol.</text>
+		<speed>10</speed>
+	</line>
+</dialogue>
+
+Portrait is the name of the sprite without extension, I've currently kept them to 256x256 but it doesn't really matter.
+Text is obvious. Char limit seems to be around the 260-270 range but keep it under 220 to be safe, I'd say. It probably varies depending on resolution for now though.
+Speed is the amount of seconds between each letter being typed - so 10 like in the last example is agonisingly slow.

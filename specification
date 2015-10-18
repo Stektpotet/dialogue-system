@@ -1,0 +1,6 @@
+Root tag is dialogue.
+Each line is encapsulated in <line>.
+
+Portrait is the name of the sprite without extension, I've currently kept them to 256x256 but it doesn't really matter.
+Text is obvious. Char limit depends on resolution with current UI system, because I'm terrible at UI.
+Speed is the amount of seconds between each letter being typed - so 10 like in the last example of scene1.xml is agonisingly slow.

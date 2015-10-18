@@ -1,0 +1,3 @@
+A dialogue system in Unity using XML.
+
+A lot of this code suffers from being coded late at night all at once. Whatever. See specification for how dialogue files are set up, and scene1.xml for an example.
