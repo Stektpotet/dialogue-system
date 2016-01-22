@@ -1,5 +1,9 @@
 <dialogue>
 	<lines>
+    <line>
+      <portrait>el car</portrait>
+      <text>Ok</text>
+    </line>
 		<line>
 			<portrait>truck</portrait>
 			<text>Alright let's go kill the Pope thanks for agreeing</text>

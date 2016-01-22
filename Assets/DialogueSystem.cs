@@ -35,19 +35,17 @@ public class DialogueSystem : MonoBehaviour {
 
 	public void TriggerDialogue(string scene, int result, bool reset = false)
 	{
-		dialogueScene = (dialogueScene == null ? scene : dialogueScene);
+		dialogueScene = (dialogueScene == null  ? scene : dialogueScene);
 		if (IsDialogueActive && scene == dialogueScene && !reset) // this dialogue already triggered
 			return;
-
+		if (scene == "END") throw new Exception("Scene called special value END");
 		lineIndex = 0;
 		lineFinished = false;
-		choiceLoaded = false;
 		lines = XmlDialogueReader.LoadDialogue(scene);
-		ActivateDialogueGUI(true);
 		choice = lines[lines.Length - 1].Choice;
+		ActivateDialogueGUI(true);
 		DisplayLine(lines[0]);
-
-		if (result != -1) results.Add(result);
+        choiceLoaded = false;
 	}
 
 	private IEnumerator TypeText()
@@ -81,14 +79,14 @@ public class DialogueSystem : MonoBehaviour {
 
 	private void ActivateButtons(bool activate)
 	{
+		print("activating buttons");
 		foreach (var button in dialogueOptions) button.gameObject.SetActive(activate);
 		if (activate)
 		{
 			for (int i = 0; i < choice.AmountOfChoices; i++)
 			{
-				print("target: " + choice.Targets[choice.getID(i)]);
-				if (choice.Targets[choice.getID(i)] != null) // if there is a target scene
-				{
+				if (choice.getTarget(i) != "END") // if there is a target scene
+                {
 					int tempVar = i; // lambdas am i right
 					dialogueOptions[i].onClick.AddListener(
 						() => ButtonListener(tempVar)
@@ -96,7 +94,7 @@ public class DialogueSystem : MonoBehaviour {
 				}
 				else // else end dialogue
 				{
-					dialogueOptions[i].onClick.AddListener(
+                    dialogueOptions[i].onClick.AddListener(
 						() => ActivateDialogueGUI(false)
 					);
 				}
@@ -104,10 +102,11 @@ public class DialogueSystem : MonoBehaviour {
 			}
 		}
 	}
-
-	private void ButtonListener(int i) {
-		var id = choice.getID(i);
-		TriggerDialogue(choice.Targets[id], id);
+	
+	private void ButtonListener(int i)
+    {
+		Debug.Log(choice.getTarget(i));
+		TriggerDialogue(choice.getTarget(i), choice.getID(i));
 		ActivateButtons(false);
 	}
 
@@ -139,11 +138,12 @@ public class DialogueSystem : MonoBehaviour {
 					lineFinished = true;
 					StopCoroutine("TypeText");
 				}
-			}
-			if (IsChoice && !choiceLoaded) // check if it now is a choice
-			{
-				ActivateButtons(true);
-				choiceLoaded = true;
+
+				if (IsChoice)
+				{
+					ActivateButtons(true);
+					choiceLoaded = true;
+				}
 			}
 		}
 	}

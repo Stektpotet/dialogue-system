@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class DialogueChoice {
 	public const int DIALOGUE_OPTION_COUNT = 2;
@@ -24,12 +25,40 @@ public class DialogueChoice {
 	/// </remarks>
 	public int getID(int buttonNumber)
 	{
-		return new List<int>(Targets.Keys)[buttonNumber];
+        try
+        {
+            if (buttonNumber <= DIALOGUE_OPTION_COUNT - 1)
+                return new List<int>(Targets.Keys)[buttonNumber];
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Debug.Log(ex.Message);
+        }
+        return -1;
 	}
+
+    public string getTarget(int buttonNumber)
+    {
+        Debug.Log("button:" + buttonNumber);
+        try
+        {
+            if (buttonNumber <= DIALOGUE_OPTION_COUNT - 1)
+                return new List<string>(Targets.Values)[buttonNumber];
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Debug.Log(ex.Message);
+        }
+        return null;
+    }
 
 	public DialogueChoice(string[] choiceText = null, Dictionary<int, string> targets = null)
 	{
 		ChoiceText = choiceText ?? new string[DIALOGUE_OPTION_COUNT];
-		Targets = targets ?? new Dictionary<int,string>(DIALOGUE_OPTION_COUNT);
+
+		var tempTargets = new Dictionary<int, string>(DIALOGUE_OPTION_COUNT);
+		for (int i = 0; i > DIALOGUE_OPTION_COUNT; i++)
+			tempTargets.Add(i, "END"); // im desperate
+		Targets = targets ?? tempTargets;
 	}
 }

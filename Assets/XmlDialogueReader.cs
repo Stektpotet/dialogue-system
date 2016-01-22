@@ -33,7 +33,7 @@ public static class XmlDialogueReader {
 				choice.ChoiceText[i] = (string)eLine;
 
 				string target = (string)eLine.Attribute("target");
-				choice.Targets.Add((int)eLine.Attribute("id"),target);
+                choice.Targets.Add((int)eLine.Attribute("id"),(target != null ? target : "END"));
 				i++;
 			}
 			lines[lines.Count - 1].Choice = choice; // choice always lies in the last line of dialogue
