@@ -17,4 +17,8 @@
 			<text speed="10">sit vestibulum nulla. Elit id magnis. Amet eu sed, elit sed leo phasellus eros sit et. Metus ullamcorper id turpis ut justo, elit wisi et mi nunc erat, rutrum arcu purus, felis quisque sodales tortor. Lorem ipsum, how original. Char limit reached right about now I guess.</text>
 		</line>
 	</lines>
+	<choice>
+		<option target="scene1_1" id="1">I agree</option>
+		<option target="scene1" id="2">wait what did you just say</option>
+	</choice>
 </dialogue>

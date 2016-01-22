@@ -8,6 +8,6 @@ public class TestScript : MonoBehaviour {
 
 	void Start()
 	{
-		button.onClick.AddListener(delegate { dialogue.TriggerDialogue("scene1"); });
+		button.onClick.AddListener(delegate { dialogue.TriggerDialogue("scene1",0); });
 	}
 }

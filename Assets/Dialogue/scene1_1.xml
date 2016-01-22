@@ -1,0 +1,12 @@
+<dialogue>
+	<lines>
+		<line>
+			<portrait>truck</portrait>
+			<text>Alright let's go kill the Pope thanks for agreeing</text>
+		</line>
+	</lines>
+	<choice>
+		<option id="3">Me too thanks</option>
+		<option id="4">Cmon dudesky</option>
+	</choice>
+</dialogue>
