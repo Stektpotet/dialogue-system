@@ -2,11 +2,11 @@
 	<lines>
 		<line>
 			<portrait>el car</portrait>
-			<text speed="0.11">Just.......... pretend these cars are honking.</text>
+			<text>Just.......... pretend these cars are honking.</text>
 		</line>
 		<line>
 			<portrait>truck</portrait>
-			<text>「すべてがFになる」 It supports Japanese but not sanskrit, nice.</text>
+			<text font="Ubuntu-Title">「すべてがFになる」 It supports Japanese but not sanskrit, nice.</text>
 		</line>
 		<line>
 			<portrait>el car</portrait>
@@ -14,7 +14,7 @@
 		</line>
 		<line>
 			<portrait>el car</portrait>
-			<text speed="10">sit vestibulum nulla. Elit id magnis. Amet eu sed, elit sed leo phasellus eros sit et. Metus ullamcorper id turpis ut justo, elit wisi et mi nunc erat, rutrum arcu purus, felis quisque sodales tortor. Lorem ipsum, how original. Char limit reached right about now I guess.</text>
+			<text speed="10" font="Ubuntu-Title">sit vestibulum nulla. Elit id magnis. Amet eu sed, elit sed leo phasellus eros sit et. Metus ullamcorper id turpis ut justo, elit wisi et mi nunc erat, rutrum arcu purus, felis quisque sodales tortor. Lorem ipsum, how original. Char limit reached right about now I guess.</text>
 		</line>
 	</lines>
 </dialogue>

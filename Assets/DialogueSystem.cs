@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
+using UnityEditor;
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
 
 public class DialogueSystem : MonoBehaviour {
 	public bool DialogueActive { get { return panel.activeSelf; } }
@@ -11,6 +9,7 @@ public class DialogueSystem : MonoBehaviour {
 	public Text dialogueText;
 	public Image image;
 	public GameObject panel;
+	public AudioSource source;
 
 	private DialogueLine[] lines;
 	private int lineIndex = 0;
@@ -28,14 +27,25 @@ public class DialogueSystem : MonoBehaviour {
 	{
 		lineFinished = false;
 		DialogueLine line = lines[lineIndex];
-        foreach (char letter in line.Text.ToCharArray())
+		PlayDialogueSound(line.Sound);
+		foreach (char letter in line.Text.ToCharArray())
 		{
 			dialogueText.text += letter;
 			yield return new WaitForEndOfFrame();
 			if (!char.IsWhiteSpace(letter)) // don't type out spaces
 				yield return new WaitForSeconds(line.TextSpeed);
+			else {
+				PlayDialogueSound(line.Sound);
+			}
 		}
+		source.pitch = 1;
 		lineFinished = true;
+	}
+
+	private void PlayDialogueSound(AudioClip sound) {
+		if (source.isPlaying) source.Stop();
+		source.pitch = Random.Range(0.5f, 1.5f);
+		source.PlayOneShot(sound);
 	}
 
 	private void DisplayLine(DialogueLine line)
@@ -43,6 +53,7 @@ public class DialogueSystem : MonoBehaviour {
 		image.sprite = line.Portrait;
 		StopCoroutine("TypeText");
 		dialogueText.text = string.Empty;
+		dialogueText.font = line.Font;
 		StartCoroutine("TypeText");
 	}
 

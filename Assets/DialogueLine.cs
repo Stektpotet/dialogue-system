@@ -12,12 +12,16 @@ public class DialogueLine {
 	public string Text { get; set; }
 	public string Name { get; set; }
 	public float TextSpeed { get; set; }
+	public Font Font { get; set; }
+	public AudioClip Sound { get; set; }
 
-	public DialogueLine(Sprite portrait = null, string text = null, float textSpeed = 0.001f, string name = "???")
+	public DialogueLine(Sprite portrait = null, string text = null, float textSpeed = 0.001f, string name = "???", Font font = null, AudioClip sound = null)
 	{
 		Portrait = portrait;
 		Text = text;
 		TextSpeed = (textSpeed == default(float) ? DEFAULT_SPEED : textSpeed);
 		Name = name ?? DEFAULT_NAME;
+		Font = font;
+		Sound = sound;
 	}
 }
