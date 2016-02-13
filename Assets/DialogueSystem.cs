@@ -4,7 +4,7 @@ using UnityEditor;
 using System.Collections;
 
 public class DialogueSystem : MonoBehaviour {
-	public bool DialogueActive { get { return panel.activeSelf; } }
+	public bool isDialogueActive { get { return panel.activeSelf; } }
 
 	public Text dialogueText;
 	public Image image;
@@ -17,7 +17,7 @@ public class DialogueSystem : MonoBehaviour {
 	
 	public void TriggerDialogue(string scene)
 	{
-		if (DialogueActive) return; // dialogue already triggered
+		if (isDialogueActive) return; // dialogue already triggered
 		panel.SetActive(true);
 		lines = XmlDialogueReader.LoadDialogue(scene);
 		DisplayLine(lines[0]);
@@ -35,23 +35,23 @@ public class DialogueSystem : MonoBehaviour {
 			if (!char.IsWhiteSpace(letter)) // don't type out spaces
 				yield return new WaitForSeconds(line.TextSpeed);
 			else {
-				PlayDialogueSound(line.Sound);
+				PlayDialogueSound(line.Sound); // play only on spaces
 			}
 		}
-		source.pitch = 1;
 		lineFinished = true;
 	}
 
-	private void PlayDialogueSound(AudioClip sound) {
+	private void PlayDialogueSound(AudioClip sound)
+	{
 		if (source.isPlaying) source.Stop();
-		source.pitch = Random.Range(0.5f, 1.5f);
+		source.pitch = Random.Range(0.7f, 1.3f);
 		source.PlayOneShot(sound);
 	}
 
 	private void DisplayLine(DialogueLine line)
 	{
-		image.sprite = line.Portrait;
 		StopCoroutine("TypeText");
+		image.sprite = line.Portrait;
 		dialogueText.text = string.Empty;
 		dialogueText.font = line.Font;
 		StartCoroutine("TypeText");
@@ -64,7 +64,7 @@ public class DialogueSystem : MonoBehaviour {
 
 	void Update()
 	{
-        if (DialogueActive)
+        if (isDialogueActive)
 		{
 			if (Input.GetKeyDown(KeyCode.Z)) // TODO rebindable
 			{
